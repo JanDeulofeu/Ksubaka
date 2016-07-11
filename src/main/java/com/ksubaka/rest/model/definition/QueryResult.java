@@ -1,8 +1,6 @@
 package com.ksubaka.rest.model.definition;
 
 
-import com.ksubaka.rest.model.types.ResultType;
-
 import java.io.Serializable;
 
 /**
