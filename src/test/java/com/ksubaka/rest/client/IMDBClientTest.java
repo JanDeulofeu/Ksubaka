@@ -2,7 +2,6 @@ package com.ksubaka.rest.client;
 
 import com.ksubaka.rest.model.MovieQuery;
 import com.ksubaka.rest.model.definition.QueryResult;
-import com.ksubaka.rest.model.types.ResultType;
 import org.junit.Test;
 
 import java.util.List;
@@ -30,6 +29,8 @@ public class IMDBClientTest {
         assertNotNull(movie.getDirector());
         assertNotNull(movie.getYear());
         assertEquals(movie.getType(), "movie");
+
+        results.stream().forEach( element -> System.out.println(element));
     }
 
 }

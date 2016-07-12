@@ -1,7 +1,5 @@
 package com.ksubaka.rest.client;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.ksubaka.rest.model.MovieQuery;
 import com.ksubaka.rest.model.definition.QueryResult;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -16,10 +14,6 @@ import java.util.List;
  */
 public class IMDBClient extends RestClient {
 
-    private TypeReference<List<MovieQuery>> listType = new TypeReference<List<MovieQuery>>() {
-    };
-    private TypeReference<MovieQuery> singleType = new TypeReference<MovieQuery>() {
-    };
 
     private final String queryListMovies = "http://omdbapi.com/?s={title}&r=json";
     private final String queryTitle = "http://omdbapi.com/?t={title}&r=json";
@@ -39,7 +33,7 @@ public class IMDBClient extends RestClient {
 
         resultResponse = search(queryListMovies, searchParam);
 
-        results = mapper.readValue(resultResponse.getBody().getObject().get("Search").toString(), listType);
+        results = mapper.readValue(resultResponse.getBody().getObject().get("Search").toString(), listMovieType);
 
         return searchMovieDetails(results);
     }
@@ -54,7 +48,7 @@ public class IMDBClient extends RestClient {
 
             if (isMovie(result)) {
                 resultResponse = search(queryTitle, result.getTitle());
-                response.add(mapper.readValue(resultResponse.getBody().toString(), singleType));
+                response.add(mapper.readValue(resultResponse.getBody().toString(), singleMovieType));
             }
         }
         return response;

@@ -3,7 +3,6 @@ package com.ksubaka.rest.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ksubaka.rest.model.definition.QueryResult;
-import com.ksubaka.rest.model.types.ResultType;
 
 /**
  * Created by jan on 11/07/2016.
@@ -64,29 +63,5 @@ public class MovieQuery implements QueryResult {
                 ", type=" + type +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MovieQuery that = (MovieQuery) o;
-
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (year != null ? !year.equals(that.year) : that.year != null) return false;
-        if (director != null ? !director.equals(that.director) : that.director != null) return false;
-        return type == that.type;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = title != null ? title.hashCode() : 0;
-        result = 31 * result + (year != null ? year.hashCode() : 0);
-        result = 31 * result + (director != null ? director.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        return result;
-    }
-
 
 }
