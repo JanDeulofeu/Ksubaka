@@ -3,9 +3,8 @@ package com.ksubaka.rest.client;
 import com.ksubaka.rest.model.definition.QueryResult;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,22 @@ public class IMDBClient extends RestClient {
 
     public List<QueryResult> getImd5(final String searchParam) throws Exception {
 
-        return searchListAndDetail(searchParam);
+        List<QueryResult> result = new ArrayList<>();
+
+        if (searchParam == null || searchParam.isEmpty()) {
+            throw new IllegalArgumentException("search param not valid");
+        }
+
+        try {
+
+            result = searchListAndDetail(searchParam);
+
+        } catch (final Exception e) {
+
+            throw new Exception("Error processing Query");
+        }
+
+        return result;
     }
 
 
@@ -33,7 +47,7 @@ public class IMDBClient extends RestClient {
 
         resultResponse = search(queryListMovies, searchParam);
 
-        results = mapper.readValue(resultResponse.getBody().getObject().get("Search").toString(), listMovieType);
+        results = convertJsonArrayToListOfObjects(resultResponse.getBody().getObject().get("Search").toString());
 
         return searchMovieDetails(results);
     }
@@ -48,23 +62,18 @@ public class IMDBClient extends RestClient {
 
             if (isMovie(result)) {
                 resultResponse = search(queryTitle, result.getTitle());
-                response.add(mapper.readValue(resultResponse.getBody().toString(), singleMovieType));
+                response.add(convertJsonToObject(resultResponse.getBody().toString()));
             }
         }
         return response;
     }
 
-
-    private boolean isMovie(final QueryResult result) {
-        return result.getType().equalsIgnoreCase("movie");
+    private List<QueryResult> convertJsonArrayToListOfObjects(final String json) throws IOException {
+        return mapper.readValue(json, listMovieType);
     }
 
-
-    private HttpResponse<JsonNode> search(final String query, final String searchParam) throws UnirestException {
-
-        return Unirest.get(query)
-                .routeParam("title", searchParam)
-                .asJson();
+    private QueryResult convertJsonToObject(final String json) throws IOException {
+        return mapper.readValue(json, singleMovieType);
     }
 }
 

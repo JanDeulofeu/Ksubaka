@@ -5,6 +5,7 @@ import com.ksubaka.rest.model.definition.QueryResult;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +31,18 @@ public class IMDBClientTest {
         assertNotNull(movie.getYear());
         assertEquals(movie.getType(), "movie");
 
-        results.stream().forEach( element -> System.out.println(element));
+        results.stream().forEach(element -> System.out.println(element));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void emptydMovieQuery() throws Exception {
+        imdbClient.getImd5("");
+        fail();
+    }
+
+    @Test(expected = Exception.class)
+    public void unexistingMovieQuery() throws Exception {
+        imdbClient.getImd5(UUID.randomUUID().toString());
+        fail();
+    }
 }

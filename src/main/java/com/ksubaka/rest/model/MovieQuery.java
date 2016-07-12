@@ -56,7 +56,7 @@ public class MovieQuery implements QueryResult {
 
     @Override
     public String toString() {
-        return "MovieQuery{" +
+        return "Movie{" +
                 "title='" + title + '\'' +
                 ", year='" + year + '\'' +
                 ", director='" + director + '\'' +
